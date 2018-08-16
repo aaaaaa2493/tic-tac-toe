@@ -1,5 +1,7 @@
 package game;
 
+import java.util.Scanner;
+
 enum Cell {
     X, O, E; // E means EMPTY
 
@@ -70,15 +72,28 @@ public class Main {
 
     }
 
+    static void makeMove(Cell[][] table) {
+
+        System.out.print("Enter the coordinates: ");
+
+        Scanner scanner = new Scanner(System.in);
+
+        int x = scanner.nextInt();
+        int y = scanner.nextInt();
+
+        table[3-y][x-1] = Cell.X;
+    }
+
     public static void main(String[] args) {
 
         Cell table[][] = new Cell[][] {
-                {Cell.E, Cell.E, Cell.E},
-                {Cell.E, Cell.E, Cell.E},
-                {Cell.E, Cell.E, Cell.E}
+                {Cell.E, Cell.X, Cell.X},
+                {Cell.O, Cell.O, Cell.E},
+                {Cell.O, Cell.X, Cell.E}
         };
 
         printTable(table);
-        printState(table);
+        makeMove(table);
+        printTable(table);
     }
 }
