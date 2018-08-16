@@ -23,12 +23,15 @@ public class Main {
     }
 
     static void printTable(Cell[][] table) {
+        System.out.println("---------");
         for (Cell[] row : table) {
+            System.out.print("| ");
             for (Cell ch: row) {
                 System.out.print(ch.str() + " ");
             }
-            System.out.println();
+            System.out.println("|");
         }
+        System.out.println("---------");
     }
 
     static void printState(Cell[][] table) {
