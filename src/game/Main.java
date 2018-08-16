@@ -1,6 +1,6 @@
 package game;
 
-import java.util.Scanner;
+import java.util.*;
 
 enum Cell {
     X, O, E; // E means EMPTY
@@ -74,14 +74,42 @@ public class Main {
 
     static void makeMove(Cell[][] table) {
 
-        System.out.print("Enter the coordinates: ");
-
         Scanner scanner = new Scanner(System.in);
 
-        int x = scanner.nextInt();
-        int y = scanner.nextInt();
+        int x;
+        int y;
 
-        table[3-y][x-1] = Cell.X;
+        while (true) {
+
+            System.out.print("Enter the coordinates: ");
+
+            try {
+                x = scanner.nextInt();
+                y = scanner.nextInt();
+            }
+            catch (InputMismatchException e) {
+                scanner.nextLine();
+                System.out.println("You should enter numbers!");
+                continue;
+            }
+
+            if (x > 3 || x < 1 || y > 3 || y < 1) {
+                System.out.println("Coordinates should be from 1 to 3!");
+                continue;
+            }
+
+            int indexX = x - 1;
+            int indexY = 3 - y;
+
+            if (table[indexY][indexX] != Cell.E) {
+                System.out.println("This cell is busy! Choose another one!");
+                continue;
+            }
+
+            table[indexY][indexX] = Cell.X;
+            break;
+
+        }
     }
 
     public static void main(String[] args) {
