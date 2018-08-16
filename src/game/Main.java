@@ -112,16 +112,38 @@ public class Main {
         }
     }
 
+    static void makeMoveLevelEasy(Cell[][] table) {
+
+        System.out.println("Making move level \"easy\"");
+
+        Random random = new Random();
+
+        while (true) {
+
+            int x = random.nextInt(3);
+            int y = random.nextInt(3);
+
+            if (table[y][x] != Cell.E) {
+                continue;
+            }
+
+            table[y][x] = Cell.X;
+            break;
+
+        }
+
+    }
+
     public static void main(String[] args) {
 
         Cell table[][] = new Cell[][] {
-                {Cell.E, Cell.X, Cell.X},
-                {Cell.O, Cell.O, Cell.E},
+                {Cell.E, Cell.E, Cell.X},
+                {Cell.O, Cell.E, Cell.E},
                 {Cell.O, Cell.X, Cell.E}
         };
 
         printTable(table);
-        makeMove(table);
+        makeMoveLevelEasy(table);
         printTable(table);
     }
 }
