@@ -1,21 +1,37 @@
 package game;
 
+enum Cell {
+    X, O, E; // E means EMPTY
+
+    public char str() {
+        if (this == X) {
+            return 'X';
+        }
+        else if (this == O) {
+            return 'O';
+        }
+        else {
+            return ' ';
+        }
+    }
+}
+
 public class Main {
 
-    static boolean check(char v1, char v2, char v3) {
-        return v1 == v2 && v2 == v3 && v1 != ' ';
+    static boolean check(Cell v1, Cell v2, Cell v3) {
+        return v1 == v2 && v2 == v3 && v1 != Cell.E;
     }
 
-    static void printTable(char[][] table) {
-        for (char[] row : table) {
-            for (char ch: row) {
-                System.out.print(ch + " ");
+    static void printTable(Cell[][] table) {
+        for (Cell[] row : table) {
+            for (Cell ch: row) {
+                System.out.print(ch.str() + " ");
             }
             System.out.println();
         }
     }
 
-    static void printState(char[][] table) {
+    static void printState(Cell[][] table) {
 
         boolean hasEmptyCells = false;
 
@@ -32,7 +48,7 @@ public class Main {
                 return;
             }
 
-            hasEmptyCells |= table[i][0] == ' ' || table[i][1] == ' ' || table[i][2] == ' ';
+            hasEmptyCells |= table[i][0] == Cell.E || table[i][1] == Cell.E || table[i][2] == Cell.E;
         }
 
         //check diagonals
@@ -53,10 +69,10 @@ public class Main {
 
     public static void main(String[] args) {
 
-        char table[][] = new char[][] {
-                {'X', 'O', ' '},
-                {'O', 'O', 'X'},
-                {' ', 'X', ' '}
+        Cell table[][] = new Cell[][] {
+                {Cell.E, Cell.E, Cell.E},
+                {Cell.E, Cell.E, Cell.E},
+                {Cell.E, Cell.E, Cell.E}
         };
 
         printTable(table);
