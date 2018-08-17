@@ -84,7 +84,7 @@ public class Main {
 
     }
 
-    static void makeMove(Cell[][] table) {
+    static void makeMove(Cell[][] table, Cell move) {
 
         Scanner scanner = new Scanner(System.in);
 
@@ -118,13 +118,13 @@ public class Main {
                 continue;
             }
 
-            table[indexY][indexX] = Cell.X;
+            table[indexY][indexX] = move;
             break;
 
         }
     }
 
-    static void makeMoveLevelEasy(Cell[][] table) {
+    static void makeMoveLevelEasy(Cell[][] table, Cell move) {
 
         System.out.println("Making move level \"easy\"");
 
@@ -139,7 +139,7 @@ public class Main {
                 continue;
             }
 
-            table[y][x] = Cell.X;
+            table[y][x] = move;
             break;
 
         }
