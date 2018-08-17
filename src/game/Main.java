@@ -49,6 +49,21 @@ enum GameState {
     }
 }
 
+interface Decision {
+    void decide(Cell[][] table, Cell move);
+
+    default Decision get(String player) {
+        switch (player) {
+            case "user":
+                return Main::makeMove;
+            case "easy":
+                return Main::makeMoveLevelEasy;
+            default:
+                return null;
+        }
+    }
+}
+
 
 public class Main {
 
@@ -161,7 +176,7 @@ public class Main {
 
     }
 
-    public static void main(String[] args) {
+    static void startGame(Decision playerX, Decision playerO) {
 
         Cell table[][] = new Cell[][] {
                 {Cell.E, Cell.E, Cell.E},
@@ -172,7 +187,7 @@ public class Main {
         GameState state;
         while (true) {
             printTable(table);
-            makeMove(table, Cell.X);
+            playerX.decide(table, Cell.X);
 
             state = getState(table);
             if (state != GameState.NOT_FINISHED) {
@@ -180,7 +195,7 @@ public class Main {
             }
 
             printTable(table);
-            makeMoveLevelEasy(table, Cell.O);
+            playerO.decide(table, Cell.O);
 
             state = getState(table);
             if (state != GameState.NOT_FINISHED) {
@@ -190,5 +205,14 @@ public class Main {
 
         printTable(table);
         System.out.println(state.str());
+
+    }
+
+    public static void main(String[] args) {
+
+        Scanner scanner = new Scanner(System.in);
+
+
+
     }
 }
