@@ -31,7 +31,22 @@ enum Cell {
 }
 
 enum GameState {
-    X_WIN, O_WIN, DRAW, NOT_FINISHED
+    X_WIN, O_WIN, DRAW, NOT_FINISHED;
+
+    public String str() {
+        if (this == X_WIN) {
+            return "X wins";
+        }
+        else if (this == O_WIN) {
+            return "O wins";
+        }
+        else if (this == DRAW) {
+            return "Draw";
+        }
+        else {
+            return "Game not finished";
+        }
+    }
 }
 
 
@@ -149,13 +164,31 @@ public class Main {
     public static void main(String[] args) {
 
         Cell table[][] = new Cell[][] {
-                {Cell.E, Cell.E, Cell.X},
-                {Cell.O, Cell.E, Cell.E},
-                {Cell.O, Cell.X, Cell.E}
+                {Cell.E, Cell.E, Cell.E},
+                {Cell.E, Cell.E, Cell.E},
+                {Cell.E, Cell.E, Cell.E}
         };
 
+        GameState state;
+        while (true) {
+            printTable(table);
+            makeMove(table, Cell.X);
+
+            state = getState(table);
+            if (state != GameState.NOT_FINISHED) {
+                break;
+            }
+
+            printTable(table);
+            makeMoveLevelEasy(table, Cell.O);
+
+            state = getState(table);
+            if (state != GameState.NOT_FINISHED) {
+                break;
+            }
+        }
+
         printTable(table);
-        makeMoveLevelEasy(table);
-        printTable(table);
+        System.out.println(state.str());
     }
 }
