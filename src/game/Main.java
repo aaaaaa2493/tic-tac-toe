@@ -16,7 +16,24 @@ enum Cell {
             return ' ';
         }
     }
+
+    public GameState winner() {
+        if (this == X) {
+            return GameState.X_WIN;
+        }
+        else if (this == O) {
+            return GameState.O_WIN;
+        }
+        else {
+            throw new IllegalArgumentException("Empty cells can not win");
+        }
+    }
 }
+
+enum GameState {
+    X_WIN, O_WIN, DRAW, NOT_FINISHED
+}
+
 
 public class Main {
 
@@ -36,38 +53,33 @@ public class Main {
         System.out.println("---------");
     }
 
-    static void printState(Cell[][] table) {
+    static GameState getState(Cell[][] table) {
 
         boolean hasEmptyCells = false;
 
         for (int i = 0; i < table.length; i++) {
             // check rows
             if (check(table[i][0], table[i][1], table[i][2])) {
-                System.out.println(table[i][0] + " wins");
-                return;
+                return table[i][0].winner();
             }
 
             //check columns
             if (check(table[0][i], table[1][i], table[2][i])) {
-                System.out.println(table[0][i] + " wins");
-                return;
+                return table[0][i].winner();
             }
 
             hasEmptyCells |= table[i][0] == Cell.E || table[i][1] == Cell.E || table[i][2] == Cell.E;
         }
 
         //check diagonals
-        if (check(table[0][0], table[1][1], table[2][2])) {
-            System.out.println(table[0][0] + " wins");
-        }
-        else if (check(table[0][2], table[1][1], table[2][0])) {
-            System.out.println(table[0][0] + " wins");
+        if (check(table[0][0], table[1][1], table[2][2]) || check(table[0][2], table[1][1], table[2][0])) {
+            return table[1][1].winner();
         }
         else if (hasEmptyCells) {
-            System.out.println("Game not finished");
+            return GameState.NOT_FINISHED;
         }
         else {
-            System.out.println("Draw");
+            return GameState.DRAW;
         }
 
     }
