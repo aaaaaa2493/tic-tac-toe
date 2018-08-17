@@ -51,8 +51,12 @@ enum GameState {
 
 interface Decision {
     void decide(Cell[][] table, Cell move);
+}
 
-    default Decision get(String player) {
+
+public class Main {
+
+    static Decision getDecision(String player) {
         switch (player) {
             case "user":
                 return Main::makeMove;
@@ -62,10 +66,6 @@ interface Decision {
                 return null;
         }
     }
-}
-
-
-public class Main {
 
     static boolean check(Cell v1, Cell v2, Cell v3) {
         return v1 == v2 && v2 == v3 && v1 != Cell.E;
@@ -212,7 +212,34 @@ public class Main {
 
         Scanner scanner = new Scanner(System.in);
 
+        while (true) {
 
+            System.out.print("Input command: ");
+            String[] command = scanner.nextLine().split(" ");
+
+            switch (command[0]) {
+                case "start":
+                    if (command.length != 3) {
+                        System.out.println("Bad parameters!");
+                        continue;
+                    }
+
+                    Decision playerX = getDecision(command[1]);
+                    Decision playerO = getDecision(command[2]);
+                    if (playerX == null || playerO == null) {
+                        System.out.println("Bad parameters!");
+                        continue;
+                    }
+
+                    startGame(playerX, playerO);
+                    System.out.println();
+                    break;
+                case "exit":
+                    return;
+                default:
+                    System.out.println("Bad command!");
+            }
+        }
 
     }
 }
