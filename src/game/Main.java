@@ -28,6 +28,18 @@ enum Cell {
             throw new IllegalArgumentException("Empty cells can not win");
         }
     }
+
+    public Cell other() {
+        if (this == X) {
+            return Cell.O;
+        }
+        else if (this == O) {
+            return Cell.X;
+        }
+        else {
+            throw new IllegalArgumentException("Empty cells can not have other");
+        }
+    }
 }
 
 enum GameState {
@@ -62,6 +74,8 @@ public class Main {
                 return Main::makeMove;
             case "easy":
                 return Main::makeMoveLevelEasy;
+            case "medium":
+                return Main::makeMoveLevelMedium;
             default:
                 return null;
         }
@@ -69,6 +83,13 @@ public class Main {
 
     static boolean check(Cell v1, Cell v2, Cell v3) {
         return v1 == v2 && v2 == v3 && v1 != Cell.E;
+    }
+
+    static boolean checkAlmost(Cell v1, Cell v2, Cell v3, Cell move) {
+        boolean fstEmpty = v1 == Cell.E && v2 == move && v3 == move;
+        boolean sndEmpty = v1 == move && v2 == Cell.E && v3 == move;
+        boolean trdEmpty = v1 == move && v2 == move && v3 == Cell.E;
+        return fstEmpty || sndEmpty || trdEmpty;
     }
 
     static void printTable(Cell[][] table) {
@@ -114,6 +135,91 @@ public class Main {
 
     }
 
+    static boolean makeRandomMove(Cell[][] table, Cell move) {
+
+        if (getState(table) != GameState.NOT_FINISHED) {
+            return false;
+        }
+
+        Random random = new Random();
+
+        while (true) {
+
+            int x = random.nextInt(3);
+            int y = random.nextInt(3);
+
+            if (table[y][x] != Cell.E) {
+                continue;
+            }
+
+            table[y][x] = move;
+            break;
+
+        }
+
+        return true;
+    }
+
+    static boolean makeObviousMove(Cell[][] table, Cell move) {
+        // check for immediate winning then for immediate losing
+        for (Cell cell : new Cell[]{move, move.other()}) {
+            for (int i = 0; i < table.length; i++) {
+
+                // check rows
+                if (checkAlmost(table[i][0], table[i][1], table[i][2], cell)) {
+                    for (int j = 0; j < table[i].length; j++) {
+                        if (table[i][j] == Cell.E) {
+                            table[i][j] = move;
+                            return true;
+                        }
+                    }
+                }
+
+                //check columns
+                if (checkAlmost(table[0][i], table[1][i], table[2][i], cell)) {
+                    for (int j = 0; j < table[i].length; j++) {
+                        if (table[j][i] == Cell.E) {
+                            table[j][i] = move;
+                            return true;
+                        }
+                    }
+                }
+
+                // check diagonals
+                if (checkAlmost(table[0][0], table[1][1], table[2][2], cell)) {
+                    if (table[0][0] == Cell.E) {
+                        table[0][0] = move;
+                        return true;
+                    }
+                    else if (table[1][1] == Cell.E) {
+                        table[1][1] = move;
+                        return true;
+                    }
+                    else if (table[2][2] == Cell.E) {
+                        table[2][2] = move;
+                        return true;
+                    }
+                }
+                else if (checkAlmost(table[0][2], table[1][1], table[2][0], cell)) {
+                    if (table[0][2] == Cell.E) {
+                        table[0][2] = move;
+                        return true;
+                    }
+                    else if (table[1][1] == Cell.E) {
+                        table[1][1] = move;
+                        return true;
+                    }
+                    else if (table[2][0] == Cell.E) {
+                        table[2][0] = move;
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
     static void makeMove(Cell[][] table, Cell move) {
 
         Scanner scanner = new Scanner(System.in);
@@ -155,25 +261,15 @@ public class Main {
     }
 
     static void makeMoveLevelEasy(Cell[][] table, Cell move) {
-
         System.out.println("Making move level \"easy\"");
+        makeRandomMove(table, move);
+    }
 
-        Random random = new Random();
-
-        while (true) {
-
-            int x = random.nextInt(3);
-            int y = random.nextInt(3);
-
-            if (table[y][x] != Cell.E) {
-                continue;
-            }
-
-            table[y][x] = move;
-            break;
-
+    static void makeMoveLevelMedium(Cell[][] table, Cell move) {
+        System.out.println("Making move level \"medium\"");
+        if (!makeObviousMove(table, move)) {
+            makeRandomMove(table, move);
         }
-
     }
 
     static void startGame(Decision playerX, Decision playerO) {
